@@ -1,0 +1,112 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: pterodactyl_db
+    user: root
+    environment:
+      - MYSQL_DATABASE=pterodactyl
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=sapassword
+      - MYSQL_ROOT_PASSWORD=sapassword
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - pterodactyl_net
+  redis:
+    image: redis:alpine
+    container_name: pterodactyl_redis
+    user: root
+    restart: always
+    networks:
+      - pterodactyl_net
+  pterodactyl_panel:
+    image: ghcr.io/pterodactyl/panel:latest
+    container_name: pterodactyl_panel
+    user: root
+    environment:
+      - APP_ENV=production
+      - APP_ENVIRONMENT_ONLY=false
+      - APP_DEBUG=true
+      - APP_URL=http://115.77.248.9 
+      - APP_TIMEZONE="Asia/Ho_Chi_Minh"
+      # - APP_KEY=base64:y1gOUtQKhBqouzVORzx9OFbF7Lyvimlq
+      # 1- y1gOUtQKhBqouzVORzx9OFbF7Lyvimlq
+      # 2- gRz9HJrbBQuap9lkn4pM0nyku1j6gRes
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=pterodactyl
+      - DB_USERNAME=sa
+      - DB_PASSWORD=sapassword
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_DRIVER=redis
+      # - MAIL_DRIVER=smtp
+      # - MAIL_HOST=taito1doraemon@gmail.com
+      # - MAIL_PORT=587
+      # - MAIL_USERNAME=your_mail_username
+      # - MAIL_PASSWORD=your_mail_password
+      # - MAIL_ENCRYPTION=tls
+      # - MAIL_FROM=taito1doraemon@gmail.com
+      # - MAIL_FROM_NAME="Pterodactyl Panel"
+    volumes:
+      # - "/var/lib/pterodactyl/volumes:/var/lib/pterodactyl/volumes"
+      # - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/srv/pterodactyl/var/:/app/var/"
+      - "/srv/pterodactyl/nginx/:/etc/nginx/http.d/"
+      - "/srv/pterodactyl/certs/:/etc/letsencrypt/"
+      - "/srv/pterodactyl/logs/:/app/storage/logs"
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - pterodactyl_net
+    healthcheck:
+      test: ["CMD", "chown", "-R", "nginx:nginx", "/app/storage/logs"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+  pterodactyl_wings:
+    image: ghcr.io/pterodactyl/wings:latest
+    container_name: pterodactyl_wings
+    user: root
+    tty: true
+    environment:
+      - TZ="Asia/Ho_Chi_Minh"
+      - WINGS_UID=988
+      - WINGS_GID=988
+      - WINGS_USERNAME=pterodactyl
+      - WINGS_DEBUG=true
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+      - "/etc/pterodactyl/:/etc/pterodactyl/"
+      - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
+      - "/var/log/pterodactyl/:/var/log/pterodactyl/"
+      - "/tmp/pterodactyl/:/tmp/pterodactyl/"
+      - "./config.yml:/etc/pterodactyl/config.yml"
+      # you may need /srv/daemon-data if you are upgrading from an old daemon
+      #- "/srv/daemon-data/:/srv/daemon-data/"
+      # Required for ssl if you use let's encrypt. uncomment to use.
+      #- "/etc/letsencrypt/:/etc/letsencrypt/"
+    ports:
+      - "8080:8080"
+      - "2022:2022"
+    depends_on:
+      - pterodactyl_panel
+    networks:
+      - pterodactyl_net
+
+volumes:
+  pterodactyl:
+  mysql:
+networks:
+  pterodactyl_net:
+    driver: bridge

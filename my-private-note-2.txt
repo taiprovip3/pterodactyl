@@ -1,0 +1,32 @@
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=sapassword@_' -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=sapassword@_" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=sapasswordAz_" -e "MSSQL_PID=Express" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
+
+- 3 vmware
+- vm1:
+	- docker-compose
+	-
+- VM1: Thuê panel chơi với bạn bè - ko cần port - ko cần vpn - unlimited
+	- tốn 1 vmware
+	- tốn 1 port modem
+	- ko tốn vps
+- VM2: Thuê panel + tên miền 25565 (server openvpn, linux, băng thông giới hạn, mở port)
+	- tốn 1 vmware
+	- tốn vps cloud + app openvpn
+- VM3: Thuê vmware chạy mod và ftp share folder server
+	- tốn 1 vmware
+	- tốn nhiều ram
+	- tốn nhiều disk
+
+docker network rm pterodactyl_net
+docker network prune
+docker network rm $(docker network ls -q)
+hostname -i | awk '{print $1}'
+docker network inspect pterodactyl_pterodactyl_net
+docker-compose build pterodactyl_wings
+docker-compose up -d --no-deps --force-recreate pterodactyl_wings
+docker login
+docker build --platform="linux/amd64" -t taiproduaxe/pixelmon-server-1.20.2:latest .
+docker push taiproduaxe/pixelmon-server-1.20.2:latest
+docker image inspect taiproduaxe/pixelmon-server-1.20.2
+# Có cái lệnh adduser trong Dockerfile nữa ó

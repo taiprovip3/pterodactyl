@@ -1,0 +1,29 @@
+# Thay đổi quyền sở hữu của thư mục và file
+chown -R nginx:nginx /app/storage
+
+# Đảm bảo quyền truy cập thư mục là 755 và quyền file là 644
+find /app/storage -type d -exec chmod 755 {} \;
+find /app/storage -type f -exec chmod 644 {} \;
+
+chmod -R 755 /app/storage
+
+php artisan key:generate --show
+
+t0yIlnC6fEjY+U2R0rRFeNm47CluzSdV6DzTO7OC9qI=
+
+docker network ls
+hostname -I | awk '{print $1}'
+docker-compose build pterodactyl_wings
+docker-compose up -d --no-deps --force-recreate pterodactyl_wings
+
+docker build --platform="linux/amd64" -t taiproduaxe/pixelmon-server-1.20.2 .
+
+C:\Users\PC\Desktop\server pixelmon mohist\libraries/
+
+Startup Command Pterodactyl:
+java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true $( [[  ! -f unix_args.txt ]] && printf %s "-jar {{SERVER_JARFILE}}" || printf %s "@unix_args.txt" )
+
+docker network ls
+docker-compose build pterodactyl_wings
+docker-compose up -d --no-deps --force-recreate pterodactyl_wings
+docker network inspect pterodactyl_pterodactyl_net
