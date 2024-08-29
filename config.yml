@@ -8,8 +8,8 @@ api:
   port: 8080
   ssl:
     enabled: false
-    cert: /etc/letsencrypt/live/115.77.248.9/fullchain.pem
-    key: /etc/letsencrypt/live/115.77.248.9/privkey.pem
+    cert: /etc/letsencrypt/live/nhinguyenmc.ddns.net/fullchain.pem
+    key: /etc/letsencrypt/live/nhinguyenmc.ddns.net/privkey.pem
   disable_remote_download: false
   upload_limit: 1000
   trusted_proxies: []
@@ -93,14 +93,14 @@ throttles:
   enabled: true
   lines: 2000
   line_reset_interval: 100
-remote: http://115.77.248.9
+remote: http://nhinguyenmc.ddns.net
 remote_query:
   timeout: 30
   boot_servers_per_page: 50
 allowed_mounts: []
 allowed_origins:
 - http://localhost
-- http://115.77.248.9
+- http://116.108.117.99
 - http://nhinguyenmc.ddns.net
 allow_cors_private_network: false
 ignore_panel_config_updates: false

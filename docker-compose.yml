@@ -10,6 +10,7 @@ services:
       - MYSQL_ROOT_PASSWORD=sapassword
     volumes:
       - mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     networks:
@@ -21,19 +22,25 @@ services:
     restart: always
     networks:
       - pterodactyl_net
+    volumes:
+      - redis:/data
   pterodactyl_panel:
     image: ghcr.io/pterodactyl/panel:latest
+    # build:
+    #   context: ./pterodactyl-panel
+    #   dockerfile: Dockerfile
+    # image: pterodactyl-panel-v1.11.7
     container_name: pterodactyl_panel
     user: root
     environment:
       - APP_ENV=production
       - APP_ENVIRONMENT_ONLY=false
       - APP_DEBUG=true
-      - APP_URL=http://115.77.248.9 
+      - APP_URL=http://nhinguyenmc.ddns.net
       - APP_TIMEZONE="Asia/Ho_Chi_Minh"
-      # - APP_KEY=base64:y1gOUtQKhBqouzVORzx9OFbF7Lyvimlq
+      - APP_KEY=y1gOUtQKhBqouzVORzx9OFbF7Lyvimlq
       # 1- y1gOUtQKhBqouzVORzx9OFbF7Lyvimlq
-      # 2- gRz9HJrbBQuap9lkn4pM0nyku1j6gRes
+      - HASHIDS_SALT=contackemauxanhmaudo
       - DB_CONNECTION=mysql
       - DB_HOST=db
       - DB_PORT=3306
@@ -60,6 +67,7 @@ services:
       - "/srv/pterodactyl/nginx/:/etc/nginx/http.d/"
       - "/srv/pterodactyl/certs/:/etc/letsencrypt/"
       - "/srv/pterodactyl/logs/:/app/storage/logs"
+      # - ./pterodactyl-panel/init.sh:/app/init.sh # Mount script file vào container
     ports:
       - "80:80"
       - "443:443"
@@ -68,6 +76,7 @@ services:
       - redis
     networks:
       - pterodactyl_net
+    # command: ["sh", "-c", "/bin/sh ./init.sh"]
     healthcheck:
       test: ["CMD", "chown", "-R", "nginx:nginx", "/app/storage/logs"]
       interval: 1m30s
@@ -78,6 +87,7 @@ services:
     container_name: pterodactyl_wings
     user: root
     tty: true
+    restart: always # Luôn restart - Đợi cho pterodactyl_panel init.sh xong
     environment:
       - TZ="Asia/Ho_Chi_Minh"
       - WINGS_UID=988
@@ -107,6 +117,7 @@ services:
 volumes:
   pterodactyl:
   mysql:
+  redis:
 networks:
   pterodactyl_net:
     driver: bridge

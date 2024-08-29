@@ -27,3 +27,4 @@ docker network ls
 docker-compose build pterodactyl_wings
 docker-compose up -d --no-deps --force-recreate pterodactyl_wings
 docker network inspect pterodactyl_pterodactyl_net
+

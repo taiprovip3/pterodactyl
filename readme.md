@@ -28,17 +28,17 @@ token
 ```
 Trong file config.yml.
 Copy các tham số trên và gắn chúng vào file `config.yml` trong thư mục project
-Đồng thời thay đổi tất cả những dòng `115.77.248.9` thành ipv4 public ứng với machine của bạn
+Đồng thời thay đổi tất cả những dòng `nhinguyenmc.ddns.net` thành ipv4 public ứng với machine của bạn
 Bước 5: Truy cập vào file trong service `pterodactyl_panel` docker
 ```bash
 /app/var/.env
 ```
 Mở file .env lên và copy base64 key
-Bước 6: Truy cập vào file docker-compose.yml mở note environment `APP_KEY`và dán base64 key vừa copy trên vào
+Bước 6: Truy cập vào file docker-compose.yml mở note environment `APP_KEY` của serivce `pterodactyl_panel` và dán key vừa copy trên vào
 Bước 7: Tắt và rebuild lại toàn bộ app
 ```bash
 docker compose down
 docker compose up -d --build
 ```
 Bước 8: Khi tất cả service đã start và không stop
-Truy cập ipv4 public của machine để tận hưởng pterodactyl
+Truy cập ipv4 public của machine để tận hưởng Pterodactyl panel.
